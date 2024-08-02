@@ -28,9 +28,7 @@ class RedirectsPlugin implements Plugin
         }
     }
 
-    public function boot(Panel $panel): void
-    {
-    }
+    public function boot(Panel $panel): void {}
 
     public function redirectResource(bool $condition = true): static
     {

@@ -12,8 +12,7 @@ function createResponse(string $uri, string $method = 'GET')
 {
     $request = Request::create($uri, $method);
 
-    $middleware = new Redirects();
+    $middleware = new Redirects;
 
-    return $middleware->handle($request, function () {
-    });
+    return $middleware->handle($request, function () {});
 }

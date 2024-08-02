@@ -68,6 +68,6 @@ class Redirect extends Model implements Sortable
      */
     protected static function newFactory()
     {
-        return new RedirectFactory();
+        return new RedirectFactory;
     }
 }

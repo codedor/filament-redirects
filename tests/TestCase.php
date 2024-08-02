@@ -63,7 +63,7 @@ class TestCase extends Orchestra
             'prefix' => '',
         ]);
 
-        $panel = new \Filament\Panel();
+        $panel = new \Filament\Panel;
         $panel
             ->id('resource-test')
             ->default(true)

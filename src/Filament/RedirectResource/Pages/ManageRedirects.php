@@ -37,7 +37,7 @@ class ManageRedirects extends ManageRecords
     {
         try {
             Excel::import(
-                new RedirectsImport(),
+                new RedirectsImport,
                 new UploadedFile(Storage::disk('local')->path($data['file']), $data['file'])
             );
 
