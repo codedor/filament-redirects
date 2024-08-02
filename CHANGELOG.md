@@ -38,24 +38,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 **Full Changelog**: https://github.com/codedor/filament-redirects/compare/v1.0.0...v1.0.1
 
-## v0.1.1 - 2023-09-20
-
-### What's Changed
-
-* Bump aglipanci/laravel-pint-action from 0.1.0 to 2.3.0 by @dependabot in https://github.com/codedor/filament-redirects/pull/2
-* Bump ramsey/composer-install from 1 to 2 by @dependabot in https://github.com/codedor/filament-redirects/pull/3
-* Bump actions/checkout from 3 to 4 by @dependabot in https://github.com/codedor/filament-redirects/pull/4
-
-**Full Changelog**: https://github.com/codedor/filament-redirects/compare/v0.1.0...v0.1.1
-
-## v0.1.0 - 2023-09-20
-
-### What's Changed
-
-* Bump dependabot/fetch-metadata from 1.3.3 to 1.6.0 by @dependabot in https://github.com/codedor/filament-redirects/pull/1
-
-**Full Changelog**: https://github.com/codedor/filament-redirects/commits/v0.1.0
-
 ## v1.0.0 - 2023-12-13
 
 Release
@@ -81,3 +63,21 @@ Also clean the ->clean_from with Ascii
 ### What's Changed
 
 - Trim cleanFrom attribute
+
+## v0.1.1 - 2023-09-20
+
+### What's Changed
+
+* Bump aglipanci/laravel-pint-action from 0.1.0 to 2.3.0 by @dependabot in https://github.com/codedor/filament-redirects/pull/2
+* Bump ramsey/composer-install from 1 to 2 by @dependabot in https://github.com/codedor/filament-redirects/pull/3
+* Bump actions/checkout from 3 to 4 by @dependabot in https://github.com/codedor/filament-redirects/pull/4
+
+**Full Changelog**: https://github.com/codedor/filament-redirects/compare/v0.1.0...v0.1.1
+
+## v0.1.0 - 2023-09-20
+
+### What's Changed
+
+* Bump dependabot/fetch-metadata from 1.3.3 to 1.6.0 by @dependabot in https://github.com/codedor/filament-redirects/pull/1
+
+**Full Changelog**: https://github.com/codedor/filament-redirects/commits/v0.1.0
