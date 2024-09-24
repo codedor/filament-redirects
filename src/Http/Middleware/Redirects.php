@@ -30,24 +30,32 @@ class Redirects
         $uri = Str::ascii($uri);
         $requestUri = Str::ascii($requestUri);
 
+        $uriWithoutProtocol = $this->removeProtocol($uri);
+
         $current = [
             'full' => $uri,
             'fullNoQuery' => Str::beforeLast($uri, '?'),
             'fullWithTrailingSlash' => Str::finish($uri, '/'),
             'fullWithoutTrailingSlash' => Str::replaceEnd('/', '', $uri),
+            'fullWithoutProtocol' => $uriWithoutProtocol,
+            'fullWithoutProtocolNoQuery' => Str::beforeLast($uriWithoutProtocol, '?'),
             'path' => $requestUri,
             'pathNoQuery' => Str::beforeLast($requestUri, '?'),
         ];
 
         $activeRedirect = $urlMaps->first(function ($redirect) use ($current) {
             $from = $redirect->clean_from;
+            $fromWithoutProtocol = preg_replace('~^https?://~', '', $from);
 
             $hasWildcard = Str::contains($from, config('filament-redirects.route-wildcard', '*'));
 
             return
                 ($hasWildcard && Str::is($from, $current['path'])) ||
                 ($hasWildcard && Str::is($from, $current['full'])) ||
-                (in_array($from, $current));
+                ($hasWildcard && Str::is($fromWithoutProtocol, $current['fullWithoutProtocol'])) ||
+                (in_array($from, $current)) ||
+                ($fromWithoutProtocol === $current['fullWithoutProtocol']) ||
+                ($fromWithoutProtocol === $current['fullWithoutProtocolNoQuery']);
         });
 
         if (! $activeRedirect || $activeRedirect->clean_from === $activeRedirect->to) {
@@ -65,5 +73,16 @@ class Redirects
         }
 
         return redirect($to, $activeRedirect->status);
+    }
+
+    private function removeProtocol(string $url): string
+    {
+        $parsedUrl = parse_url($url);
+
+        if (! isset($parsedUrl['scheme'])) {
+            return $url;
+        }
+
+        return Str::after($url, '://');
     }
 }
