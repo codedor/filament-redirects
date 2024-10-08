@@ -128,13 +128,6 @@ it('can create a redirect with different protocols', function () {
     ]);
 });
 
-dataset('protocol-combinations', [
-    'http to http' => ['http', 'http'],
-    'http to https' => ['http', 'https'],
-    'https to http' => ['https', 'http'],
-    'https to https' => ['https', 'https'],
-]);
-
 it('redirects correctly regardless of protocol', function ($fromProtocol, $toProtocol) {
     $redirect = Redirect::create([
         'from' => "{$fromProtocol}://example.com/test",
@@ -166,7 +159,12 @@ it('redirects correctly regardless of protocol', function ($fromProtocol, $toPro
         ->and($response->headers->get('Location'))
         ->toBe($redirect->to);
 })
-    ->with('protocol-combinations');
+    ->with([
+        'http to http' => ['http', 'http'],
+        'http to https' => ['http', 'https'],
+        'https to http' => ['https', 'http'],
+        'https to https' => ['https', 'https'],
+    ]);
 
 it('redirects correctly with query parameters', function () {
     $redirect = Redirect::create([

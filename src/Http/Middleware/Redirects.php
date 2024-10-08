@@ -30,7 +30,7 @@ class Redirects
         $uri = Str::ascii($uri);
         $requestUri = Str::ascii($requestUri);
 
-        $uriWithoutProtocol = $this->removeProtocol($uri);
+        $uriWithoutProtocol = Str::after($uri, '://');
 
         $current = [
             'full' => $uri,
@@ -73,16 +73,5 @@ class Redirects
         }
 
         return redirect($to, $activeRedirect->status);
-    }
-
-    private function removeProtocol(string $url): string
-    {
-        $parsedUrl = parse_url($url);
-
-        if (! isset($parsedUrl['scheme'])) {
-            return $url;
-        }
-
-        return Str::after($url, '://');
     }
 }
