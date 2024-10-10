@@ -24,9 +24,11 @@ class RedirectResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('from')
+                    ->rules(['url', 'required'])
                     ->required(),
 
                 Forms\Components\TextInput::make('to')
+                    ->rules(['url', 'required'])
                     ->required(),
 
                 Forms\Components\Select::make('status')

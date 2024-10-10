@@ -1,8 +1,10 @@
 <?php
 
 use Codedor\FilamentRedirects\Filament\RedirectResource\Pages\ManageRedirects;
+use Codedor\FilamentRedirects\Http\Middleware\Redirects;
 use Codedor\FilamentRedirects\Models\Redirect;
 use Filament\Notifications\Notification;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 use function Pest\Livewire\livewire;
@@ -10,12 +12,12 @@ use function Pest\Livewire\livewire;
 beforeEach(function () {
     $this->redirects = Redirect::factory()->createMany([
         [
-            'from' => '/one',
-            'to' => '/two',
+            'from' => 'http://example.com/one',
+            'to' => 'http://example.com/two',
         ],
         [
-            'from' => '/foo',
-            'to' => '/bar',
+            'from' => 'https://example.com/foo',
+            'to' => 'https://example.com/bar',
         ],
     ]);
 
@@ -66,8 +68,8 @@ it('has an import action that can truncate the table', function () {
 
     $this->assertDatabaseCount(Redirect::class, 3);
     $this->assertDatabaseHas(Redirect::class, [
-        'from' => '/from',
-        'to' => '/to',
+        'from' => 'https://example.com/from',
+        'to' => 'https://example.com/to',
         'status' => 301,
     ]);
 });
@@ -85,16 +87,121 @@ it('can create a redirect', function () {
     livewire(ManageRedirects::class)
         ->assertActionExists('create')
         ->callAction('create', [
-            'from' => '/from',
-            'to' => '/to',
+            'from' => 'https://example.com/from',
+            'to' => 'https://example.com/to',
             'status' => 410,
         ])
         ->assertHasNoActionErrors();
 
     $this->assertDatabaseCount(Redirect::class, 3);
     $this->assertDatabaseHas(Redirect::class, [
-        'from' => '/from',
-        'to' => '/to',
+        'from' => 'https://example.com/from',
+        'to' => 'https://example.com/to',
         'status' => 410,
     ]);
+});
+
+it('can create a redirect with validation errors for invalid URLs', function () {
+    livewire(ManageRedirects::class)
+        ->assertActionExists('create')
+        ->callAction('create', [
+            'from' => 'invalid-url',
+            'to' => 'another-invalid-url',
+        ])
+        ->assertHasActionErrors(['from' => 'url', 'to' => 'url']);
+});
+
+it('can create a redirect with different protocols', function () {
+    livewire(ManageRedirects::class)
+        ->assertActionExists('create')
+        ->callAction('create', [
+            'from' => 'http://example.com/old',
+            'to' => 'https://example.com/new',
+            'status' => 301,
+        ])
+        ->assertHasNoActionErrors();
+
+    $this->assertDatabaseHas(Redirect::class, [
+        'from' => 'http://example.com/old',
+        'to' => 'https://example.com/new',
+        'status' => 301,
+    ]);
+});
+
+it('redirects correctly regardless of protocol', function ($fromProtocol, $toProtocol) {
+    $redirect = Redirect::create([
+        'from' => "{$fromProtocol}://example.com/test",
+        'to' => "{$toProtocol}://example.com/result",
+        'status' => 301,
+        'online' => true,
+    ]);
+
+    $request = Request::create($redirect->from);
+
+    $middleware = new Redirects;
+    $response = $middleware->handle($request, fn () => response('This is a secret place'));
+
+    expect($response->getStatusCode())
+        ->toBe(301)
+        ->and($response->headers->get('Location'))
+        ->toBe($redirect->to);
+
+    $redirect->from = $fromProtocol === 'http'
+        ? 'https://example.com/test'
+        : 'http://example.com/test';
+
+    $request = Request::create($redirect->from);
+
+    $response = $middleware->handle($request, fn () => response('This is a secret place'));
+
+    expect($response->getStatusCode())
+        ->toBe(301)
+        ->and($response->headers->get('Location'))
+        ->toBe($redirect->to);
+})
+    ->with([
+        'http to http' => ['http', 'http'],
+        'http to https' => ['http', 'https'],
+        'https to http' => ['https', 'http'],
+        'https to https' => ['https', 'https'],
+    ]);
+
+it('redirects correctly with query parameters', function () {
+    $redirect = Redirect::create([
+        'from' => 'http://example.com/query',
+        'to' => 'https://example.com/result',
+        'status' => 301,
+        'pass_query_string' => true,
+        'online' => true,
+    ]);
+
+    $query = '?param=value';
+    $request = Request::create("{$redirect->from}{$query}", 'GET');
+
+    $middleware = new Redirects;
+    $response = $middleware->handle($request, fn () => response('This is a secret place'));
+
+    expect($response->getStatusCode())
+        ->toBe(301)
+        ->and($response->headers->get('Location'))
+        ->toBe("{$redirect->to}{$query}");
+});
+
+it('handles wildcard redirects', function () {
+    $redirect = Redirect::create([
+        'from' => 'http://example.com/wildcard*',
+        'to' => 'https://example.com/result',
+        'status' => 301,
+        'online' => true,
+    ]);
+
+    $request = Request::create('http://example.com/wildcard-test', 'GET');
+
+    $middleware = new Redirects;
+    $response = $middleware->handle($request, fn () => response('This is a secret place'));
+
+    expect($response->getStatusCode())
+        ->toBe(301)
+        ->and($response->headers->get('Location'))
+        ->toBe($redirect->to);
 });
