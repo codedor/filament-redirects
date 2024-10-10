@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## v1.2.0 - 2024-10-10
+
+### What's Changed
+
+* Bump ramsey/composer-install from 2 to 3 by @dependabot in https://github.com/codedor/filament-redirects/pull/8
+* Bump stefanzweifel/git-auto-commit-action from 4 to 5 by @dependabot in https://github.com/codedor/filament-redirects/pull/5
+* Bump dependabot/fetch-metadata from 1.6.0 to 2.2.0 by @dependabot in https://github.com/codedor/filament-redirects/pull/14
+* Feature/fil001 141 redirect url validation by @thibautdeg in https://github.com/codedor/filament-redirects/pull/15
+
+### New Contributors
+
+* @thibautdeg made their first contribution in https://github.com/codedor/filament-redirects/pull/15
+
+**Full Changelog**: https://github.com/codedor/filament-redirects/compare/v1.1.0...v1.2.0
+
 ## v1.1.0 - 2024-08-02
 
 ### What's Changed
