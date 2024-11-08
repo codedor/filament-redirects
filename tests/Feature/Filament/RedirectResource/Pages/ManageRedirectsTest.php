@@ -102,6 +102,10 @@ it('can create a redirect', function () {
 });
 
 it('can create a redirect with validation errors for invalid URLs', function () {
+    config([
+        'filament-redirects.input-validation' => ['url', 'required'],
+    ]);
+
     livewire(ManageRedirects::class)
         ->assertActionExists('create')
         ->callAction('create', [
@@ -124,6 +128,23 @@ it('can create a redirect with different protocols', function () {
     $this->assertDatabaseHas(Redirect::class, [
         'from' => 'http://example.com/old',
         'to' => 'https://example.com/new',
+        'status' => 301,
+    ]);
+});
+
+it('can create a redirect with relative url', function () {
+    livewire(ManageRedirects::class)
+        ->assertActionExists('create')
+        ->callAction('create', [
+            'from' => '/old',
+            'to' => '/new',
+            'status' => 301,
+        ])
+        ->assertHasNoActionErrors();
+
+    $this->assertDatabaseHas(Redirect::class, [
+        'from' => '/old',
+        'to' => '/new',
         'status' => 301,
     ]);
 });

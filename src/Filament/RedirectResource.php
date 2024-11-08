@@ -24,11 +24,11 @@ class RedirectResource extends Resource
         return $form
             ->schema([
                 Forms\Components\TextInput::make('from')
-                    ->rules(['url', 'required'])
+                    ->rules(config('filament-redirects.input-validation', ['required']))
                     ->required(),
 
                 Forms\Components\TextInput::make('to')
-                    ->rules(['url', 'required'])
+                    ->rules(config('filament-redirects.input-validation', ['required']))
                     ->required(),
 
                 Forms\Components\Select::make('status')
