@@ -54,6 +54,7 @@ class Redirect extends Model implements Sortable
             ->start($dontAddSlash ? '' : '/')
             ->ascii()
             ->trim()
+            ->replace('/?', '?')
             ->rtrim('/');
     }
 
