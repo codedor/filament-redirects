@@ -2,7 +2,7 @@
 
 use Maatwebsite\Excel\Facades\Excel;
 
-//it('can import redirects', function () {
+// it('can import redirects', function () {
 //    Excel::fake();
 //
 //    $this->actingAs($this->givenUser())
@@ -19,4 +19,4 @@ use Maatwebsite\Excel\Facades\Excel;
 //        return true;
 //    });
 //
-//});
+// });
