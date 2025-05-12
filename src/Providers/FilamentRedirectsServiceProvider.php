@@ -16,7 +16,8 @@ class FilamentRedirectsServiceProvider extends PackageServiceProvider
             ->setBasePath(__DIR__ . '/../')
             ->hasConfigFile()
             ->hasMigration('create_redirects_table')
-            ->runsMigrations();
+            ->runsMigrations()
+            ->hasTranslations();
     }
 
     public function packageBooted()
