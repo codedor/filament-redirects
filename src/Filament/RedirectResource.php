@@ -15,14 +15,14 @@ class RedirectResource extends Resource
 {
     protected static ?string $model = \Codedor\FilamentRedirects\Models\Redirect::class;
 
-    protected static ?string $navigationGroup = 'SEO';
+    protected static string | \UnitEnum | null $navigationGroup = 'SEO';
 
-    protected static ?string $navigationIcon = 'heroicon-o-globe-alt';
+    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-globe-alt';
 
-    public static function form(Form $form): Form
+    public static function form(\Filament\Schemas\Schema $schema): \Filament\Schemas\Schema
     {
-        return $form
-            ->schema([
+        return $schema
+            ->components([
                 Forms\Components\TextInput::make('from')
                     ->rules(config('filament-redirects.input-validation', ['required']))
                     ->required(),
@@ -64,12 +64,12 @@ class RedirectResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                \Filament\Actions\EditAction::make(),
+                \Filament\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                \Filament\Actions\BulkActionGroup::make([
+                    \Filament\Actions\DeleteBulkAction::make(),
                 ]),
             ])
             ->reorderable('sort_order');
