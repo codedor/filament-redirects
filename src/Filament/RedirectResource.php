@@ -4,7 +4,6 @@ namespace Codedor\FilamentRedirects\Filament;
 
 use Codedor\FilamentRedirects\Filament\RedirectResource\Pages\ManageRedirects;
 use Filament\Forms;
-use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
@@ -15,9 +14,9 @@ class RedirectResource extends Resource
 {
     protected static ?string $model = \Codedor\FilamentRedirects\Models\Redirect::class;
 
-    protected static string | \UnitEnum | null $navigationGroup = 'SEO';
+    protected static string|\UnitEnum|null $navigationGroup = 'SEO';
 
-    protected static string | \BackedEnum | null $navigationIcon = 'heroicon-o-globe-alt';
+    protected static string|\BackedEnum|null $navigationIcon = 'heroicon-o-globe-alt';
 
     public static function form(\Filament\Schemas\Schema $schema): \Filament\Schemas\Schema
     {
