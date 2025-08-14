@@ -41,10 +41,13 @@ class Redirects
             'fullWithoutProtocolNoQuery' => Str::beforeLast($uriWithoutProtocol, '?'),
             'path' => $requestUri,
             'pathNoQuery' => Str::beforeLast($requestUri, '?'),
+            'pathWithoutTrailingSlash' => Str::replaceEnd('/', '', $requestUri),
+            'pathWithTrailingSlash' => Str::finish($requestUri, '/'),
         ];
 
-        $activeRedirect = $urlMaps->first(function ($redirect) use ($current) {
+        $activeRedirect = $urlMaps->first(function (Redirect $redirect) use ($current) {
             $from = $redirect->clean_from;
+
             $fromWithoutProtocol = preg_replace('~^https?://~', '', $from);
 
             $hasWildcard = Str::contains($from, config('filament-redirects.route-wildcard', '*'));
