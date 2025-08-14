@@ -32,7 +32,7 @@ class Redirects
 
         $uriWithoutProtocol = Str::after($uri, '://');
 
-        $queryString = (Str::contains($requestUri, '?') ? '?' . Str::after($requestUri, '?') : '');
+        $queryString = Str::contains($requestUri, '?') ? '?' . Str::after($requestUri, '?') : '';
         $current = [
             'full' => $uri,
             'fullNoQuery' => Str::beforeLast($uri, '?'),
