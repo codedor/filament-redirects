@@ -22,12 +22,13 @@ class ManageRedirects extends ManageRecords
         return [
             Actions\CreateAction::make(),
             Action::make('import')
-                ->label('Import')
+                ->label(__('filament-redirects::admin.import'))
                 ->icon('heroicon-o-arrow-up-on-square')
                 ->action(fn (array $data) => $this->importRedirects($data))
                 ->visible(fn (): bool => RedirectResource::canCreate())
                 ->form([
                     FileUpload::make('file')
+                        ->label(__('filament-redirects::admin.file'))
                         ->disk('local'),
                 ]),
         ];
@@ -44,12 +45,12 @@ class ManageRedirects extends ManageRecords
             $this->dispatch('refreshTable');
 
             Notification::make()
-                ->title('Import was successful')
+                ->title(__('filament-redirects::admin.import succesful'))
                 ->success()
                 ->send();
         } catch (\Throwable $th) {
             Notification::make()
-                ->title('Something went wrong during the import')
+                ->title(__('filament-redirects::admin.import error'))
                 ->body($th->getMessage())
                 ->danger()
                 ->send();
