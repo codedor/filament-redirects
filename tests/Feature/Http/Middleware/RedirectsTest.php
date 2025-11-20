@@ -129,3 +129,67 @@ it('will redirect with a wildcard', function () {
     $this->assertEquals($response2->getStatusCode(), 302);
     $this->assertEquals($response2->getTargetUrl(), 'http://localhost/to');
 });
+
+it('will redirect if redirect has a trailing slash', function () {
+    Redirect::factory()->create([
+        'sort_order' => 1,
+        'from' => '/from/',
+        'to' => '/to',
+        'status' => 302,
+        'pass_query_string' => true,
+        'online' => true,
+    ]);
+
+    $response = createResponse('/from');
+
+    $this->assertEquals($response->getStatusCode(), 302);
+    $this->assertEquals($response->getTargetUrl(), 'http://localhost/to');
+});
+
+it('will redirect if redirect has no trailing slash', function () {
+    Redirect::factory()->create([
+        'sort_order' => 1,
+        'from' => '/from/',
+        'to' => '/to',
+        'status' => 302,
+        'pass_query_string' => true,
+        'online' => true,
+    ]);
+
+    $response = createResponse('/from/');
+
+    $this->assertEquals($response->getStatusCode(), 302);
+    $this->assertEquals($response->getTargetUrl(), 'http://localhost/to');
+});
+
+it('will redirect if redirect has a trailing slash and query parameters', function () {
+    Redirect::factory()->create([
+        'sort_order' => 1,
+        'from' => '/from/?query=string',
+        'to' => '/to',
+        'status' => 302,
+        'pass_query_string' => true,
+        'online' => true,
+    ]);
+
+    $response = createResponse('/from?query=string');
+
+    $this->assertEquals($response->getStatusCode(), 302);
+    $this->assertEquals($response->getTargetUrl(), 'http://localhost/to?query=string');
+});
+
+it('will redirect if redirect has no trailing slash and query parameters', function () {
+    Redirect::factory()->create([
+        'sort_order' => 1,
+        'from' => '/from?query=string',
+        'to' => '/to',
+        'status' => 302,
+        'pass_query_string' => true,
+        'online' => true,
+    ]);
+
+    $response = createResponse('/from/?query=string');
+
+    $this->assertEquals($response->getStatusCode(), 302);
+    $this->assertEquals($response->getTargetUrl(), 'http://localhost/to?query=string');
+});
