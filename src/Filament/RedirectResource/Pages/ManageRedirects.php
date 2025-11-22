@@ -26,7 +26,7 @@ class ManageRedirects extends ManageRecords
                 ->icon('heroicon-o-arrow-up-on-square')
                 ->action(fn (array $data) => $this->importRedirects($data))
                 ->visible(fn (): bool => RedirectResource::canCreate())
-                ->form([
+                ->schema([
                     FileUpload::make('file')
                         ->label(__('filament-redirects::admin.file'))
                         ->disk('local'),
