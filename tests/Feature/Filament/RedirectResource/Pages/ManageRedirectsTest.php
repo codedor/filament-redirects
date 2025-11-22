@@ -24,24 +24,24 @@ beforeEach(function () {
 });
 
 it('can list redirects', function () {
-   Livewire::test(ManageRedirects::class)
+    Livewire::test(ManageRedirects::class)
         ->assertSuccessful()
         ->assertCanSeeTableRecords($this->redirects);
 });
 
 it('has an edit action', function () {
-   Livewire::test(ManageRedirects::class)
+    Livewire::test(ManageRedirects::class)
         ->assertTableActionExists('edit');
 });
 
 it('has a delete action', function () {
-   Livewire::test(ManageRedirects::class)
+    Livewire::test(ManageRedirects::class)
         ->assertTableActionExists('delete')
         ->assertTableBulkActionExists('delete');
 });
 
 it('has an import action that can throw an error', function () {
-   Livewire::test(ManageRedirects::class)
+    Livewire::test(ManageRedirects::class)
         ->assertActionExists('import')
         ->callAction('import');
 
@@ -54,7 +54,7 @@ it('has an import action that can truncate the table', function () {
         file_get_contents(__DIR__ . '/../../../../Fixtures/import_redirects.xlsx', 'import_redirects.xlsx')
     );
 
-   Livewire::test(ManageRedirects::class)
+    Livewire::test(ManageRedirects::class)
         ->assertActionExists('import')
         ->callAction('import', ['file' => ['file' => 'import_redirects.xlsx'],
         ]);
@@ -74,7 +74,7 @@ it('has an import action that can truncate the table', function () {
 });
 
 it('can create a redirect with validation errors', function () {
-   Livewire::test(ManageRedirects::class)
+    Livewire::test(ManageRedirects::class)
         ->assertActionExists('create')
         ->callAction('create', [
             'from' => '/from',
@@ -83,7 +83,7 @@ it('can create a redirect with validation errors', function () {
 });
 
 it('can create a redirect', function () {
-   Livewire::test(ManageRedirects::class)
+    Livewire::test(ManageRedirects::class)
         ->assertActionExists('create')
         ->callAction('create', [
             'from' => 'https://example.com/from',
@@ -105,7 +105,7 @@ it('can create a redirect with validation errors for invalid URLs', function () 
         'filament-redirects.input-validation' => ['url', 'required'],
     ]);
 
-   Livewire::test(ManageRedirects::class)
+    Livewire::test(ManageRedirects::class)
         ->assertActionExists('create')
         ->callAction('create', [
             'from' => 'invalid-url',
@@ -115,7 +115,7 @@ it('can create a redirect with validation errors for invalid URLs', function () 
 });
 
 it('can create a redirect with different protocols', function () {
-   Livewire::test(ManageRedirects::class)
+    Livewire::test(ManageRedirects::class)
         ->assertActionExists('create')
         ->callAction('create', [
             'from' => 'http://example.com/old',
@@ -132,7 +132,7 @@ it('can create a redirect with different protocols', function () {
 });
 
 it('can create a redirect with relative url', function () {
-   Livewire::test(ManageRedirects::class)
+    Livewire::test(ManageRedirects::class)
         ->assertActionExists('create')
         ->callAction('create', data: [
             'from' => '/old',
