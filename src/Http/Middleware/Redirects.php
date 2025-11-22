@@ -32,6 +32,7 @@ class Redirects
 
         $uriWithoutProtocol = Str::after($uri, '://');
 
+        $queryString = Str::contains($requestUri, '?') ? '?' . Str::after($requestUri, '?') : '';
         $current = [
             'full' => $uri,
             'fullNoQuery' => Str::beforeLast($uri, '?'),
@@ -41,10 +42,13 @@ class Redirects
             'fullWithoutProtocolNoQuery' => Str::beforeLast($uriWithoutProtocol, '?'),
             'path' => $requestUri,
             'pathNoQuery' => Str::beforeLast($requestUri, '?'),
+            'pathWithoutTrailingSlash' => rtrim(Str::beforeLast($requestUri, '?'), '/') . $queryString,
+            'pathWithTrailingSlash' => Str::finish(Str::beforeLast($requestUri, '?'), '/') . $queryString,
         ];
 
-        $activeRedirect = $urlMaps->first(function ($redirect) use ($current) {
+        $activeRedirect = $urlMaps->first(function (Redirect $redirect) use ($current) {
             $from = $redirect->clean_from;
+
             $fromWithoutProtocol = preg_replace('~^https?://~', '', $from);
 
             $hasWildcard = Str::contains($from, config('filament-redirects.route-wildcard', '*'));

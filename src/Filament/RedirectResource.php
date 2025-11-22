@@ -2,6 +2,7 @@
 
 namespace Codedor\FilamentRedirects\Filament;
 
+use Codedor\FilamentRedirects\Enums\RedirectStatus;
 use Codedor\FilamentRedirects\Filament\RedirectResource\Pages\ManageRedirects;
 use Filament\Forms;
 use Filament\Resources\Resource;
@@ -23,25 +24,26 @@ class RedirectResource extends Resource
         return $schema
             ->components([
                 Forms\Components\TextInput::make('from')
+                    ->label(__('filament-redirects::admin.from'))
                     ->rules(config('filament-redirects.input-validation', ['required']))
                     ->required(),
 
                 Forms\Components\TextInput::make('to')
+                    ->label(__('filament-redirects::admin.to'))
                     ->rules(config('filament-redirects.input-validation', ['required']))
                     ->required(),
 
                 Forms\Components\Select::make('status')
+                    ->label(__('filament-redirects::admin.status'))
                     ->required()
-                    ->options([
-                        301 => __('301 - Permanent redirect'),
-                        302 => __('302 - Temporary redirect'),
-                        410 => __('410 - Gone (for page that once existed, but is gone now)'),
-                    ]),
+                    ->options(RedirectStatus::class),
 
                 Forms\Components\Toggle::make('pass_query_string')
+                    ->label(__('filament-redirects::admin.pass query string'))
                     ->default(false),
 
                 Forms\Components\Toggle::make('online')
+                    ->label(__('filament-redirects::admin.online'))
                     ->default(false),
 
             ]);
@@ -52,12 +54,18 @@ class RedirectResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('from')
+                    ->label(__('filament-redirects::admin.from'))
                     ->searchable()
                     ->url(fn ($record) => Str::replace('*', '', $record->from), true),
+
                 Tables\Columns\TextColumn::make('to')
+                    ->label(__('filament-redirects::admin.to'))
                     ->searchable()
                     ->url(fn ($record) => Str::replace('*', '', $record->to), true),
-                Tables\Columns\TextColumn::make('status'),
+
+                Tables\Columns\TextColumn::make('status')
+                    ->label(__('filament-redirects::admin.status'))
+                    ->formatStateUsing(fn (int $state): string => RedirectStatus::tryFrom($state)->getLabel()),
             ])
             ->filters([
                 //
