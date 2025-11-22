@@ -135,12 +135,12 @@ it('can create a redirect with different protocols', function () {
 it('can create a redirect with relative url', function () {
     livewire(ManageRedirects::class)
         ->assertActionExists('create')
-        ->callAction('create', [
+        ->callAction('create', data: [
             'from' => '/old',
             'to' => '/new',
             'status' => 301,
         ])
-        ->assertHasNoActionErrors();
+        ->assertHasNoFormErrors();
 
     $this->assertDatabaseHas(Redirect::class, [
         'from' => '/old',
